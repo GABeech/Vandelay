@@ -1,68 +1,90 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Vandelay Industries</title>
-    <link rel="stylesheet" type="text/css" href="core.css" >
-  </head>
-  <body>
-    <div class="content">
+
+<head>
+  <title>Vandelay Industries</title>
+  <link rel="stylesheet" type="text/css" href="core.css">
+  <script type="text/javascript">
+    function load() {
+      console.group("Vandelay Network Operating System 0.1-Alpha");
+      console.log("Starting NOS");
+      console.log("Authorized access only, please contact Vandelay IT for access.")
+      console.groupEnd();
+    }
+  </script>
+</head>
+
+<body onload="load()">
+  <div class="content">
     <div class="spinner"></div>
+    <div id="reset" class="reset">
+      Resetting checks <span>.</span><span>.</span><span>.</span>
+    </div>
     <div id="system-check" class="loading">
       Checking Servers <span>.</span><span>.</span><span>.</span> <span id="system-ok" class="ok">OK</span>
     </div>
     <div id="browser-check" class="pre-load">
-        Checking Browser <span>.</span><span>.</span><span>.</span> <span id="browser-ok" class="ok">OK</span>
+      Checking Browser <span>.</span><span>.</span><span>.</span> <span id="browser-ok" class="ok">OK</span>
     </div>
     <div id="user-check" class="pre-load">
-        Checking User <span>.</span><span>.</span><span>.</span> <span id="user-ok" class="failed">FAILED</span>
-
+      Checking User <span>.</span><span>.</span><span>.</span> <span id="user-ok" class="failed">FAILED</span>
     </div>
-    </div>
-  </body>
-  <script type="text/javascript">
-    var systemElement = document.getElementById("system-check");
-    systemElement.addEventListener("animationend", sListener,false);
-    function sListener(event){
-      var sElement = document.getElementById("system-ok");
-      sElement.style.visibility = "visible";
-      document.getElementById("system-ok").style.visibility = "visible"
-      document.getElementById("browser-check").className = "loading";
-    }
-    var browserListenter = document.getElementById("browser-ok");
-    browserListenter.addEventListener("animationend",bListener,false);
-    function bListener(event){
-      var sElement = document.getElementById("browser-ok");
-      sElement.style.visibility = "visible";
-      document.getElementById("browser-ok").style.visibility = "visible"
-      document.getElementById("user-check").className = "loading";
+  </div>
+</body>
+<script type="text/javascript">
+  var systemElement = document.getElementById("system-check");
+  var browserCheck = document.getElementById("browser-check");
+  var userCheck = document.getElementById("user-check");
+  var resetElement = document.getElementById("reset");
 
-    }
-    var userListenter = document.getElementById("user-ok");
-    userListenter.addEventListener("animationend", uListener, false);
-    function uListener(event){
-      var sElement = document.getElementById("user-ok");
-      sElement.style.visibility = "visible";
-      document.getElementById("browser-ok").style.visibility = "visible"
-      setTimeout(() => {
-        var systemElement = document.getElementById("system-check");
-        var browserCheck = document.getElementById("browser-check");
+  var browserListenter = document.getElementById("browser-ok");
+  var userListenter = document.getElementById("user-ok");
 
-        var userCheck = document.getElementById("user-check");
-        systemElement.className = "pre-load";
-        browserCheck.className = "pre-load";
-        userCheck.className = "pre-load";
-        document.getElementById("browser-ok").style.visibility = "hidden"
-        document.getElementById("system-ok").style.visibility = "hidden"
-        document.getElementById("user-ok").style.visibility = "hidden"
-      }, 5000);
-      setTimeout(() => {
-        console.log("In Second Timeout");
-        var sc = document.getElementById("system-check");
-        sc.className = "loading";
-        console.log(sc);
+  systemElement.addEventListener("animationend", sListener, false);
+  browserListenter.addEventListener("animationend", sListener, false);
+  userListenter.addEventListener("animationend", sListener, false);
 
-      }, 1000);
-      document.getElementById("system-check").className = "loading";
-      console.log("end");
+  function sListener(event) {
+
+    switch (event.originalTarget.parentNode.id) {
+      case "system-check":
+        document.getElementById("system-ok").style.visibility = "visible";
+        browserCheck.className = "loading";
+        break;
+      case "browser-check":
+        document.getElementById("browser-ok").style.visibility = "visible";
+        userCheck.className = "loading";
+        break;
+      case "user-check":
+        document.getElementById("user-ok").style.visibility = "visible";
+        resetCheck();
+        break;
+      case "reset":
+        resetElement.className = "pre-load";
+        systemElement.className = "loading";
+        break;
     }
-  </script>
+
+  }
+
+
+  function resetCheck() {
+    var systemOk = document.getElementById("system-ok");
+    var browserOk = document.getElementById("browser-ok");
+    var userOk = document.getElementById("user-ok");
+    setTimeout(() => {
+      systemElement.className = "pre-load";
+      browserCheck.className = "pre-load";
+      userCheck.className = "pre-load";
+      resetElement.className = "loading";
+      resetElement.addEventListener("animationend", sListener, false);
+      systemOk.style.visibility = "hidden";
+      browserOk.style.visibility = "hidden";
+      userOk.style.visibility = "hidden";
+
+    }, 3000);
+
+  }
+</script>
+
 </html>
